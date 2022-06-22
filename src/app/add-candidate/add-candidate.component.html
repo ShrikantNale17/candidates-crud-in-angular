@@ -3,34 +3,45 @@
         <div class="py-5 text-center">
             <h2>Add Candidate</h2>
         </div>
-        <form #userForm="ngForm" (ngSubmit)="onSubmit()">
-            {{userForm.value | json}}
+        <form [formGroup]="regForm" (ngSubmit)="onSubmit()">
             <div class="row g-5">
                 <div class="col-md-7 col-lg-8 ms-auto me-auto">
                     <h4 class="mb-3">Basic Info</h4>
                     <div class="row g-3">
                         <div class="col-sm-6">
                             <label class="form-label">First name</label>
-                            <input type="text" class="form-control" #name="ngModel" name="firstName" ngModel>
+                            <input type="text"
+                                [class.is-invalid]="regForm.controls['fName'].invalid && (regForm.controls['fName'].touched || isSubmitted)"
+                                class="form-control" formControlName="fName" name="fName">
+                            <div
+                                *ngIf="!regForm.controls['fName'].valid && (regForm.controls['fName'].touched|| isSubmitted)">
+                                <small class="text-danger" *ngIf="regForm.controls['fName']?.errors?.['required']">
+                                    First Name is required
+                                </small>
+
+                            </div>
                         </div>
                         <div class="col-sm-6">
                             <label class="form-label">Last name</label>
-                            <input type="text" class="form-control" name="lastName" ngModel>
+                            <input type="text" class="form-control" formControlName="lName" name="lName">
                         </div>
 
                         <div class="col-12">
                             <label class="form-label">Gender</label>
                             <div>
                                 <div class="form-check form-check-inline">
-                                    <input class="form-check-input" type="radio" name="gender" ngModel>
+                                    <input class="form-check-input" type="radio" value="male" formControlName="gender"
+                                        name="gender">
                                     <label class="form-check-label">Male</label>
                                 </div>
                                 <div class="form-check form-check-inline">
-                                    <input class="form-check-input" type="radio" name="gender" ngModel>
+                                    <input class="form-check-input" type="radio" value="female" formControlName="gender"
+                                        name="gender">
                                     <label class="form-check-label">Female</label>
                                 </div>
                                 <div class="form-check form-check-inline">
-                                    <input class="form-check-input" type="radio" name="gender" ngModel>
+                                    <input class="form-check-input" type="radio" value="other" formControlName="gender"
+                                        name="gender">
                                     <label class="form-check-label">Other</label>
                                 </div>
                             </div>
@@ -38,17 +49,19 @@
 
                         <div class="col-12">
                             <label class="form-label">Email</label>
-                            <input type="email" class="form-control" placeholder="you@example.com" name="email" ngModel>
+                            <input type="email" class="form-control" placeholder="you@example.com"
+                                formControlName="email" name="email">
                         </div>
 
                         <div class="col-12">
                             <label class="form-label">Address</label>
-                            <textarea class="form-control" placeholder="1234 Main St" name="address" ngModel></textarea>
+                            <textarea class="form-control" placeholder="1234 Main St" formControlName="address"
+                                name="address"></textarea>
                         </div>
 
                         <div class="col-md-5">
                             <label class="form-label">Country</label>
-                            <select class="form-select" name="country" ngModel>
+                            <select class="form-select" formControlName="country" name="country">
                                 <option value="">Choose...</option>
                                 <option>India</option>
                                 <option>United States</option>
@@ -57,7 +70,7 @@
 
                         <div class="col-md-4">
                             <label class="form-label">State</label>
-                            <select class="form-select" name="state" ngModel>
+                            <select class="form-select" formControlName="state" name="state">
                                 <option value="">Choose...</option>
                                 <option>Maharashtra</option>
                                 <option>Karnataka</option>
@@ -66,7 +79,7 @@
 
                         <div class="col-md-3">
                             <label class="form-label">Pin / Zip</label>
-                            <input type="text" class="form-control" name="pin" ngModel>
+                            <input type="text" class="form-control" formControlName="pin" name="pin">
                         </div>
                     </div>
 
@@ -74,102 +87,64 @@
 
                     <h4 class="mb-3">Professional Info</h4>
 
-                    <div class="row g-3">
+                    <div class="row g-3" formGroupName="prof_info">
                         <div class="col-12">
                             <label class="form-label">
                                 Choose your skills
                                 <span class="small text-muted">(min 3 skills)</span>
                             </label>
-                            <div class="mb-3">
-                                <div class="form-check form-check-inline">
-                                    <input class="form-check-input" type="checkbox" name="skills" ngModel>
-                                    <label class="form-check-label">Angular</label>
-                                </div>
-                                <div class="form-check form-check-inline">
-                                    <input class="form-check-input" type="checkbox" name="skills" ngModel>
-                                    <label class="form-check-label">React</label>
-                                </div>
-                                <div class="form-check form-check-inline">
-                                    <input class="form-check-input" type="checkbox" name="skills" ngModel>
-                                    <label class="form-check-label">Node.JS</label>
-                                </div>
-                                <div class="form-check form-check-inline">
-                                    <input class="form-check-input" type="checkbox" name="skills" ngModel>
-                                    <label class="form-check-label">JavaScript</label>
-                                </div>
-                                <div class="form-check form-check-inline">
-                                    <input class="form-check-input" type="checkbox" name="skills" ngModel>
-                                    <label class="form-check-label">Flutter</label>
-                                </div>
-                                <div class="form-check form-check-inline">
-                                    <input class="form-check-input" type="checkbox" name="skills" ngModel>
-                                    <label class="form-check-label">Java</label>
+                            <div class="mb-3" formArrayName="skills">
+
+                                <div class="form-check form-check-inline" *ngFor="let skill of skills_Data">
+                                    <input class="form-check-input" type="checkbox" (change)="manage_Skills($event)"
+                                        value="{{skill}}">
+                                    <label class="form-check-label">{{skill}}</label>
                                 </div>
                             </div>
                         </div>
                     </div>
 
-                    <div class="row gy-3">
-                        <div class="col-12" formArrayName="experience">
+                    <div class="row gy-3" formGroupName="prof_info">
+                        <div class="col-12" formArrayName="exper">
                             <label class="form-label">
                                 <strong>
                                     Experience
                                     <span class="small text-muted">(min 2, max 5 items)</span>
                                 </strong>
                             </label>
-                            <div class="card mx-3 mt-3">
+                            <div class="card mx-3 mt-3" *ngFor="let data of exarray.controls;let i=index">
                                 <div class="card-body">
                                     <h6 class="card-title text-muted mb-3">
-                                        Experience #1
-                                        <a href="#" class="float-end text-danger fw-normal">Remove</a>
+                                        Experience #{{i+1}}
+                                        <a (click)="removeExp(i)" class="float-end text-danger fw-normal">Remove</a>
                                     </h6>
-                                    <div class="row g-3">
+                                    <div class="row g-3" [formGroupName]="i">
                                         <div class="col-6">
                                             <label class="form-label">Company Name</label>
-                                            <input type="text" class="form-control" name="comp_name" ngModel>
+                                            <input type="text" class="form-control" formControlName="cName"
+                                                name="cName">
                                         </div>
                                         <div class="col-6">
                                             <label class="form-label">Duration <span class="text-muted">(in
                                                     months)</span></label>
-                                            <input type="number" class="form-control" name="duration" ngModel>
+                                            <input type="number" formControlName="duration" class="form-control"
+                                                name="duration">
                                         </div>
                                         <div class="col-12">
                                             <label class="form-label">Describe your responsibilities</label>
-                                            <textarea class="form-control" name="responsibilities" ngModel></textarea>
+                                            <textarea class="form-control" formControlName="responsibilities"
+                                                name="responsibilities"></textarea>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                            <div class="card mx-3 mt-3">
-                                <div class="card-body">
-                                    <h6 class="card-title text-muted mb-3">
-                                        Experience #2
-                                        <a href="#" class="float-end text-danger fw-normal">Remove</a>
-                                    </h6>
-                                    <div class="row g-3">
-                                        <div class="col-6">
-                                            <label class="form-label">Company Name</label>
-                                            <input type="text" class="form-control" ngModel>
-                                        </div>
-                                        <div class="col-6">
-                                            <label class="form-label">Duration <span class="text-muted">(in
-                                                    months)</span></label>
-                                            <input type="number" class="form-control" ngModel>
-                                        </div>
-                                        <div class="col-12">
-                                            <label class="form-label">Describe your responsibilities</label>
-                                            <textarea class="form-control" ngModel></textarea>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <a class="d-block mt-3" href="#">Add more experience</a>
+                            <a class="d-block mt-3" (click)="add()">Add more experience</a>
                         </div>
                     </div>
 
                     <hr class="my-4">
 
-                    <button class="btn btn-primary" type="submit" routerLink="/">Save Candidate</button>
+                    <button class="btn btn-primary" type="submit">Save Candidate</button>
                 </div>
             </div>
         </form>

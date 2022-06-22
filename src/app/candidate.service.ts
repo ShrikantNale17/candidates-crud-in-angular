@@ -7,8 +7,6 @@ import { Candidate } from './candidate';
 })
 export class CandidateService {
 
-  candidate!: Candidate;
-
   constructor() { }
 
   getCandidates() {
