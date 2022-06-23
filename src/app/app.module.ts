@@ -6,12 +6,14 @@ import { AddCandidateComponent } from './add-candidate/add-candidate.component';
 import { AppRoutingRoutingModule } from './app-routing-routing.module';
 import { ListComponent } from './list/list.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { EditCandidateComponent } from './edit-candidate/edit-candidate.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     AddCandidateComponent,
-    ListComponent
+    ListComponent,
+    EditCandidateComponent
   ],
   imports: [
     BrowserModule,

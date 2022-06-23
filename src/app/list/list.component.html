@@ -1,3 +1,9 @@
+<style>
+    a {
+        cursor: pointer;
+    }
+</style>
+
 <div class="container my-4">
     <main>
         <div class="py-5">
@@ -22,27 +28,16 @@
                                     <th>Actions</th>
                                 </tr>
                             </thead>
-                            <tbody *ngFor="let candidate of candidates; index as i">
-                                <tr>
+                            <tbody>
+                                <tr *ngFor="let candidate of candidates; index as i">
                                     <td>{{i+1}}</td>
                                     <td>{{candidate.fName + " " + candidate.lName}}</td>
                                     <td>{{candidate.email}}</td>
                                     <td>{{candidate.prof_info.skills.length}}</td>
-                                    <td>{{candidate.prof_info.experience[0].duration}</td>
+                                    <td>{{getTotalExperience(candidate.id)}}</td>
                                     <td>
-                                        <a href="#">Edit</a>
-                                        <a href="#" class="text-danger ms-2">Delete</a>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>2</td>
-                                    <td>Abhijit Borade</td>
-                                    <td>abhijit@angularminds.com</td>
-                                    <td>5</td>
-                                    <td>60</td>
-                                    <td>
-                                        <a href="#">Edit</a>
-                                        <a href="#" class="text-danger ms-2">Delete</a>
+                                        <a (click)="editCandidate(candidate.id)" class="text-primary">Edit</a>
+                                        <a (click)="deleteCandidate(candidate.id)" class="text-danger ms-2">Delete</a>
                                     </td>
                                 </tr>
                             </tbody>

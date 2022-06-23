@@ -151,7 +151,8 @@
                                 <div class="form-check form-check-inline" *ngFor="let skill of skills_Data">
                                     <input id="{{skill}}" class="form-check-input" type="checkbox"
                                         [class.is-invalid]="skills.length < 3 && (skills.touched || isSubmitted)"
-                                        (change)="manage_Skills($event)" value="{{skill}}">
+                                        (change)="manage_Skills($event)"
+                                        [checked]="formData.prof_info.skills.includes(skill)" value="{{skill}}">
                                     <label class="form-check-label" for="{{skill}}">{{skill}}</label>
                                 </div>
                             </div>
@@ -233,8 +234,7 @@
 
                     <hr class="my-4">
 
-                    <button class="btn btn-primary" type="submit">Save Candidate</button>
-                    <button class="btn btn-secondary ms-2" type="button" routerLink="">Cancel</button>
+                    <button class="btn btn-primary" type="submit">Update Candidate</button>
                 </div>
             </div>
         </form>
